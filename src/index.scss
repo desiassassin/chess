@@ -1,7 +1,41 @@
+$block-size: 100px;
+$white-square: #808080;
+$black-square: #000;
+
 *,
 *::before,
 *::after {
      box-sizing: border-box;
      margin: 0;
      padding: 0;
+}
+
+html {
+     background-color: rgb(30, 30, 30);
+}
+
+body {
+     display: grid;
+     place-items: center;
+     min-height: 100vh;
+
+     #root {
+          margin-block: 2rem;
+
+          .row {
+               display: flex;
+
+               .block {
+                    aspect-ratio: 1/1;
+                    width: $block-size;
+
+                    &.white {
+                         background-color: $white-square;
+                    }
+                    &.black {
+                         background-color: $black-square;
+                    }
+               }
+          }
+     }
 }
