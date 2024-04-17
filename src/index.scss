@@ -1,6 +1,8 @@
 $block-size: 100px;
-$white-square: #808080;
-$black-square: #000;
+$white-square: #eeeed2;
+$black-square: #769656;
+$white-piece: #fff;
+$black-piece: #000;
 
 *,
 *::before,
@@ -28,12 +30,15 @@ body {
                .block {
                     aspect-ratio: 1/1;
                     width: $block-size;
+                    font-size: 4rem;
+                    display: grid;
+                    place-items: center;
 
                     &.white {
-                         background-color: $white-square;
+                         background-color: $white-square !important;
                     }
                     &.black {
-                         background-color: $black-square;
+                         background-color: $black-square !important;
                     }
                }
           }
