@@ -1,6 +1,9 @@
 $block-size: 100px;
+$piece-size: calc($block-size / 1.5);
 $white-square: #eeeed2;
 $black-square: #769656;
+$selected-square: #efd548;
+$kill-square: hsl(24, 77%, 58%);
 $white-piece: #fff;
 $black-piece: #000;
 
@@ -30,7 +33,7 @@ body {
                .block {
                     aspect-ratio: 1/1;
                     width: $block-size;
-                    font-size: 4rem;
+                    font-size: $piece-size;
                     display: grid;
                     place-items: center;
 
@@ -39,6 +42,13 @@ body {
                     }
                     &.black {
                          background-color: $black-square !important;
+                    }
+
+                    &.selected {
+                         background-color: $selected-square !important;
+                    }
+                    &.kill {
+                         background-color: $kill-square !important;
                     }
                }
           }

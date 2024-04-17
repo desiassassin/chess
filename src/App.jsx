@@ -48,6 +48,23 @@ const PIECE_POSITION = {
 
 function App() {
      const [GRID, setGRID] = useState([]);
+     const [selectedBlock, setSelectedBlock] = useState(null);
+
+     function handlePieceSelect(event) {
+          const [row, col] = event.currentTarget.id.split("-");
+          const block = GRID[row - 1][col - 1];
+
+          // set this block as selected and store it as selected block
+          block.select();
+          setSelectedBlock(block);
+     }
+
+     function handlePieceDrop(event) {
+          // set the already selected block as unselected
+          selectedBlock.unselect();
+
+          setSelectedBlock(null);
+     }
 
      // create grid
      useEffect(() => {
@@ -67,6 +84,23 @@ function App() {
           setGRID(grid);
      }, []);
 
+     // check for valid moves
+     useEffect(() => {
+          if (selectedBlock && !selectedBlock.empty) {
+               const moves = selectedBlock.piece.findMoves(GRID, selectedBlock);
+
+               // setGRID((previousGrid) => {
+               //      for (const move of moves) {
+               //           const row = move[0] - 1;
+               //           const col = move[1] - 1;
+               //           previousGrid[row][col].droppable = true;
+               //      }
+
+               //      return [...previousGrid];
+               // });
+          }
+     }, [selectedBlock, GRID]);
+
      return (
           <>
                {GRID.map((row, rowIndex) => (
@@ -75,7 +109,8 @@ function App() {
                               <div
                                    key={`${rowIndex + 1}-${blockIndex + 1}`}
                                    id={`${rowIndex + 1}-${blockIndex + 1}`}
-                                   className={`block ${block.color}`}
+                                   className={`block ${block.color} ${block.selected ? "selected" : ""}`}
+                                   onClick={selectedBlock ? handlePieceDrop : handlePieceSelect}
                               >
                                    {(function () {
                                         if (block.empty) return;
