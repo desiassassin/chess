@@ -7,8 +7,8 @@ export class Piece {
           const validMoves = [];
 
           for (const move of moves) {
-               const row = move[0] - 1;
-               const col = move[1] - 1;
+               const row = move[0];
+               const col = move[1];
                const colorToCheckFor = this.color === "white" ? "black" : "white";
                const block = GRID[row][col];
 
@@ -33,32 +33,32 @@ export class Rook extends Piece {
           const moves = [];
 
           // find moves upwards
-          for (let row = selectedBlock.row - 2; row > 0; row--) {
+          for (let row = selectedBlock.row - 1; row > 0; row--) {
                const col = selectedBlock.col;
 
-               const block = GRID[row][col - 1];
+               const block = GRID[row][col];
                if (block.empty) {
-                    moves.push([row + 1, col]);
+                    moves.push([row, col]);
                     continue;
                }
                if (block.piece.color === colorToCheckFor) {
-                    moves.push([row + 1, col]);
+                    moves.push([row, col]);
                }
                if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
           }
 
           // find moves downwards
-          for (let row = selectedBlock.row; row < GRID.length; row++) {
+          for (let row = selectedBlock.row + 1; row < GRID.length; row++) {
                const col = selectedBlock.col;
 
-               const block = GRID[row][col - 1];
+               const block = GRID[row][col];
 
                if (block.empty) {
-                    moves.push([row + 1, col]);
+                    moves.push([row, col]);
                     continue;
                }
                if (block.piece.color === colorToCheckFor) {
-                    moves.push([row + 1, col]);
+                    moves.push([row, col]);
                }
                if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
           }

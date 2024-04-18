@@ -9,41 +9,41 @@ const ROWS = 8;
 const COLUMNS = 8;
 const PIECE_POSITION = {
      // first row
-     11: new Rook({ color: "black" }),
-     12: new Knight({ color: "black" }),
-     13: new Bishop({ color: "black" }),
-     14: new King({ color: "black" }),
-     15: new Queen({ color: "black" }),
-     16: new Bishop({ color: "black" }),
-     17: new Knight({ color: "black" }),
-     18: new Rook({ color: "black" }),
+     "00": new Rook({ color: "black" }),
+     "01": new Knight({ color: "black" }),
+     "02": new Bishop({ color: "black" }),
+     "03": new Queen({ color: "black" }),
+     "04": new King({ color: "black" }),
+     "05": new Bishop({ color: "black" }),
+     "06": new Knight({ color: "black" }),
+     "07": new Rook({ color: "black" }),
      // second row
-     21: new Pawn({ color: "black" }),
-     22: new Pawn({ color: "black" }),
-     23: new Pawn({ color: "black" }),
-     24: new Pawn({ color: "black" }),
-     25: new Pawn({ color: "black" }),
-     26: new Pawn({ color: "black" }),
-     27: new Pawn({ color: "black" }),
-     28: new Pawn({ color: "black" }),
+     10: new Pawn({ color: "black" }),
+     11: new Pawn({ color: "black" }),
+     12: new Pawn({ color: "black" }),
+     13: new Pawn({ color: "black" }),
+     14: new Pawn({ color: "black" }),
+     15: new Pawn({ color: "black" }),
+     16: new Pawn({ color: "black" }),
+     17: new Pawn({ color: "black" }),
      // seventh row
-     71: new Pawn({ color: "white" }),
-     72: new Pawn({ color: "white" }),
-     73: new Pawn({ color: "white" }),
-     74: new Pawn({ color: "white" }),
-     75: new Pawn({ color: "white" }),
-     76: new Pawn({ color: "white" }),
-     77: new Pawn({ color: "white" }),
-     78: new Pawn({ color: "white" }),
+     60: new Pawn({ color: "white" }),
+     61: new Pawn({ color: "white" }),
+     62: new Pawn({ color: "white" }),
+     63: new Pawn({ color: "white" }),
+     64: new Pawn({ color: "white" }),
+     65: new Pawn({ color: "white" }),
+     66: new Pawn({ color: "white" }),
+     67: new Pawn({ color: "white" }),
      // eight row
-     81: new Rook({ color: "white" }),
-     82: new Knight({ color: "white" }),
-     83: new Bishop({ color: "white" }),
-     84: new Queen({ color: "white" }),
-     85: new King({ color: "white" }),
-     86: new Bishop({ color: "white" }),
-     87: new Knight({ color: "white" }),
-     88: new Rook({ color: "white" })
+     70: new Rook({ color: "white" }),
+     71: new Knight({ color: "white" }),
+     72: new Bishop({ color: "white" }),
+     73: new Queen({ color: "white" }),
+     74: new King({ color: "white" }),
+     75: new Bishop({ color: "white" }),
+     76: new Knight({ color: "white" }),
+     77: new Rook({ color: "white" })
 };
 
 function App() {
@@ -52,7 +52,7 @@ function App() {
 
      function handlePieceSelect(event) {
           const [row, col] = event.currentTarget.id.split("-");
-          const block = GRID[row - 1][col - 1];
+          const block = GRID[row][col];
 
           // set this block as selected and store it as selected block
           block.select();
@@ -70,14 +70,14 @@ function App() {
      useEffect(() => {
           const grid = [];
 
-          for (let row = 1; row <= ROWS; row++) {
+          for (let row = 0; row < ROWS; row++) {
                grid.push([]);
 
-               for (let col = 1; col <= COLUMNS; col++) {
+               for (let col = 0; col < COLUMNS; col++) {
                     const piece = PIECE_POSITION[`${row}${col}`];
                     const color = (row + col) % 2 ? "black" : "white";
 
-                    grid[row - 1].push(new Block({ row, col, color, piece }));
+                    grid[row].push(new Block({ row, col, color, piece }));
                }
           }
 
@@ -88,6 +88,8 @@ function App() {
      useEffect(() => {
           if (selectedBlock && !selectedBlock.empty) {
                const moves = selectedBlock.piece.findMoves(GRID, selectedBlock);
+
+               console.log(moves);
 
                // setGRID((previousGrid) => {
                //      for (const move of moves) {
@@ -104,11 +106,11 @@ function App() {
      return (
           <>
                {GRID.map((row, rowIndex) => (
-                    <div key={rowIndex + 1} className="row">
+                    <div key={rowIndex} className="row">
                          {row.map((block, blockIndex) => (
                               <div
-                                   key={`${rowIndex + 1}-${blockIndex + 1}`}
-                                   id={`${rowIndex + 1}-${blockIndex + 1}`}
+                                   key={`${rowIndex}-${blockIndex}`}
+                                   id={`${rowIndex}-${blockIndex}`}
                                    className={`block ${block.color} ${block.selected ? "selected" : ""}`}
                                    onClick={selectedBlock ? handlePieceDrop : handlePieceSelect}
                               >
