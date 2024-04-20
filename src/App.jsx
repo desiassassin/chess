@@ -51,6 +51,8 @@ function App() {
      const [GRID, setGRID] = useState([]);
      const [selectedBlock, setSelectedBlock] = useState(null);
      const [playerTurn, setPlayerTurn] = useState(1);
+     const [player1Check, setPlayer1Check] = useState(false);
+     const [player2Check, setPlayer2Check] = useState(false);
 
      function handlePieceSelect(event) {
           const [row, col] = event.currentTarget.id.split("-");
@@ -134,6 +136,28 @@ function App() {
           }
      }, [selectedBlock]);
 
+     // check for check on king
+     useEffect(() => {
+          // check both kings if they're in check
+          console.time("validating check");
+          const gridFlatMap = GRID.flatMap((row) => row);
+          const player1King = gridFlatMap.find((block) => !block.empty && block.piece instanceof King && block.piece.player === 1);
+          const player2King = gridFlatMap.find((block) => !block.empty && block.piece instanceof King && block.piece.player === 2);
+          const player1Pieces = gridFlatMap.filter((block) => !block.empty && block.piece?.player === 1);
+          const player2Pieces = gridFlatMap.filter((block) => !block.empty && block.piece?.player === 2);
+
+          // validate player1
+          const player1Moves = player1Pieces.flatMap((block) => block.piece.findMoves(GRID, block));
+          const player2Moves = player2Pieces.flatMap((block) => block.piece.findMoves(GRID, block));
+
+          const player1Check = !!player2Moves.filter(([row, col]) => row === player1King?.row && col === player1King?.col).length;
+          const player2Check = !!player1Moves.filter(([row, col]) => row === player2King?.row && col === player2King?.col).length;
+
+          setPlayer1Check(player1Check);
+          setPlayer2Check(player2Check);
+          console.timeEnd("validating check");
+     }, [playerTurn, GRID]);
+
      return (
           <>
                {GRID.map((row, rowIndex) => (
@@ -148,7 +172,11 @@ function App() {
                                         block.selected && "selected",
                                         block.droppable && "droppable",
                                         !block.empty && block.droppable && "kill",
-                                        !block.empty && "piece"
+                                        !block.empty && "piece",
+                                        !block.empty &&
+                                             block.piece instanceof King &&
+                                             ((block.piece.player === 1 && player1Check) || (block.piece.player === 2 && player2Check)) &&
+                                             "check"
                                    )}
                                    onClick={selectedBlock ? handlePieceDrop : handlePieceSelect}
                               >

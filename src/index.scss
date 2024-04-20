@@ -4,6 +4,7 @@ $white-square: #eeeed2;
 $black-square: #769656;
 $selected-square: #efd548;
 $kill-piece: hsl(24, 77%, 58%);
+$check-piece: red;
 $drop-square: rgba(192, 192, 192, 0.5);
 $white-piece: #fff;
 $black-piece: #000;
@@ -49,7 +50,6 @@ body {
                               cursor: grabbing;
                          }
                     }
-
                     &.selected {
                          background-color: $selected-square !important;
                     }
@@ -65,6 +65,9 @@ body {
                          svg {
                               fill: $kill-piece !important;
                          }
+                    }
+                    &.check {
+                         background-color: $check-piece !important;
                     }
                }
           }
