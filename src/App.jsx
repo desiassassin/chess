@@ -10,41 +10,41 @@ const ROWS = 8;
 const COLUMNS = 8;
 const PIECE_POSITION = {
      // first row
-     "00": new Rook({ color: "black" }),
-     "01": new Knight({ color: "black" }),
-     "02": new Bishop({ color: "black" }),
-     "03": new Queen({ color: "black" }),
-     "04": new King({ color: "black" }),
-     "05": new Bishop({ color: "black" }),
-     "06": new Knight({ color: "black" }),
-     "07": new Rook({ color: "black" }),
+     "00": new Rook({ color: "black", player: 2 }),
+     "01": new Knight({ color: "black", player: 2 }),
+     "02": new Bishop({ color: "black", player: 2 }),
+     "03": new Queen({ color: "black", player: 2 }),
+     "04": new King({ color: "black", player: 2 }),
+     "05": new Bishop({ color: "black", player: 2 }),
+     "06": new Knight({ color: "black", player: 2 }),
+     "07": new Rook({ color: "black", player: 2 }),
      // second row
-     10: new Pawn({ color: "black" }),
-     11: new Pawn({ color: "black" }),
-     12: new Pawn({ color: "black" }),
-     13: new Pawn({ color: "black" }),
-     14: new Pawn({ color: "black" }),
-     15: new Pawn({ color: "black" }),
-     16: new Pawn({ color: "black" }),
-     17: new Pawn({ color: "black" }),
+     10: new Pawn({ color: "black", player: 2 }),
+     11: new Pawn({ color: "black", player: 2 }),
+     12: new Pawn({ color: "black", player: 2 }),
+     13: new Pawn({ color: "black", player: 2 }),
+     14: new Pawn({ color: "black", player: 2 }),
+     15: new Pawn({ color: "black", player: 2 }),
+     16: new Pawn({ color: "black", player: 2 }),
+     17: new Pawn({ color: "black", player: 2 }),
      // seventh row
-     60: new Pawn({ color: "white" }),
-     61: new Pawn({ color: "white" }),
-     62: new Pawn({ color: "white" }),
-     63: new Pawn({ color: "white" }),
-     64: new Pawn({ color: "white" }),
-     65: new Pawn({ color: "white" }),
-     66: new Pawn({ color: "white" }),
-     67: new Pawn({ color: "white" }),
+     60: new Pawn({ color: "white", player: 1 }),
+     61: new Pawn({ color: "white", player: 1 }),
+     62: new Pawn({ color: "white", player: 1 }),
+     63: new Pawn({ color: "white", player: 1 }),
+     64: new Pawn({ color: "white", player: 1 }),
+     65: new Pawn({ color: "white", player: 1 }),
+     66: new Pawn({ color: "white", player: 1 }),
+     67: new Pawn({ color: "white", player: 1 }),
      // eight row
-     70: new Rook({ color: "white" }),
-     71: new Knight({ color: "white" }),
-     72: new Bishop({ color: "white" }),
-     73: new Queen({ color: "white" }),
-     74: new King({ color: "white" }),
-     75: new Bishop({ color: "white" }),
-     76: new Knight({ color: "white" }),
-     77: new Rook({ color: "white" })
+     70: new Rook({ color: "white", player: 1 }),
+     71: new Knight({ color: "white", player: 1 }),
+     72: new Bishop({ color: "white", player: 1 }),
+     73: new Queen({ color: "white", player: 1 }),
+     74: new King({ color: "white", player: 1 }),
+     75: new Bishop({ color: "white", player: 1 }),
+     76: new Knight({ color: "white", player: 1 }),
+     47: new Rook({ color: "white", player: 1 })
 };
 
 function App() {
@@ -64,6 +64,19 @@ function App() {
      }
 
      function handlePieceDrop(event) {
+          // moving piece logic goes here
+          const [row, col] = event.currentTarget.id.split("-").map(Number);
+          const nextBlock = GRID[row][col];
+
+          // do nothing if the next block is not droppable and is not the same block
+          if (!nextBlock.droppable && row !== selectedBlock.row && col !== selectedBlock.col) return;
+
+          /* move selected block to next block */
+          if (nextBlock.droppable) {
+               nextBlock.assignPiece(selectedBlock.piece);
+               selectedBlock.removePiece();
+          }
+
           // set the already selected block as unselected
           selectedBlock.unselect();
           setSelectedBlock(null);

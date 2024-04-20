@@ -9,6 +9,17 @@ export class Block {
           this.droppable = false;
      }
 
+     assignPiece(piece) {
+          this.piece = piece;
+          this.empty = false;
+          this.piece.moved = true;
+     }
+
+     removePiece() {
+          this.piece = undefined;
+          this.empty = true;
+     }
+
      select() {
           this.selected = true;
      }
