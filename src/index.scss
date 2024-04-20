@@ -3,7 +3,7 @@ $piece-size: calc($block-size / 1.5);
 $white-square: #eeeed2;
 $black-square: #769656;
 $selected-square: #efd548;
-$kill-square: hsl(24, 77%, 58%);
+$kill-piece: hsl(24, 77%, 58%);
 $drop-square: rgba(192, 192, 192, 0.5);
 $white-piece: #fff;
 $black-piece: #000;
@@ -60,7 +60,9 @@ body {
                          aspect-ratio: 1 / 1;
                     }
                     &.kill {
-                         background-color: $kill-square !important;
+                         svg {
+                              fill: $kill-piece !important;
+                         }
                     }
                }
           }

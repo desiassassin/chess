@@ -38,6 +38,13 @@ export class King extends Piece {
      constructor({ color, player }) {
           super({ color, player });
      }
+
+     findMoves(GRID, selectedBlock) {
+          return [
+               ...checkStraightMoves(GRID, selectedBlock, this.opponentColor, 1),
+               ...checkDiagonalMoves(GRID, selectedBlock, this.opponentColor, 1)
+          ];
+     }
 }
 export class Pawn extends Piece {
      constructor({ color, player }) {
@@ -107,7 +114,7 @@ export class Knight extends Piece {
      }
 }
 
-function checkStraightMoves(GRID, selectedBlock, colorToCheckFor) {
+function checkStraightMoves(GRID, selectedBlock, colorToCheckFor, length = Infinity) {
      // find vertical moves
      const moves = [];
 
@@ -116,6 +123,9 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor) {
           const col = selectedBlock.col;
 
           const block = GRID[row][col];
+
+          if (Math.abs(selectedBlock.row - row - 1) >= length) break;
+
           if (block.empty) {
                moves.push([row, col]);
                continue;
@@ -129,8 +139,9 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor) {
      // find moves downwards
      for (let row = selectedBlock.row + 1; row < GRID.length; row++) {
           const col = selectedBlock.col;
-
           const block = GRID[row][col];
+
+          if (Math.abs(selectedBlock.row - row + 1) >= length) break;
 
           if (block.empty) {
                moves.push([row, col]);
@@ -148,6 +159,8 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor) {
 
           const block = GRID[row][col];
 
+          if (Math.abs(selectedBlock.col - col - 1) >= length) break;
+
           if (block.empty) {
                moves.push([row, col]);
                continue;
@@ -164,6 +177,8 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor) {
 
           const block = GRID[row][col];
 
+          if (Math.abs(selectedBlock.col - col + 1) >= length) break;
+
           if (block.empty) {
                moves.push([row, col]);
                continue;
@@ -177,7 +192,7 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor) {
      return moves;
 }
 
-function checkDiagonalMoves(GRID, selectedBlock, colorToCheckFor) {
+function checkDiagonalMoves(GRID, selectedBlock, colorToCheckFor, length = Infinity) {
      // find vertical moves
      const moves = [];
 
@@ -188,6 +203,7 @@ function checkDiagonalMoves(GRID, selectedBlock, colorToCheckFor) {
           const block = GRID[row][col];
 
           if (col < 0) break;
+          if (Math.abs(diff - 1) >= length) break;
 
           if (block.empty) {
                moves.push([row, col]);
@@ -206,6 +222,7 @@ function checkDiagonalMoves(GRID, selectedBlock, colorToCheckFor) {
           const block = GRID[row][col];
 
           if (col > GRID[0].length - 1) break;
+          if (Math.abs(diff - 1) >= length) break;
 
           if (block.empty) {
                moves.push([row, col]);
@@ -224,6 +241,7 @@ function checkDiagonalMoves(GRID, selectedBlock, colorToCheckFor) {
           const block = GRID[row][col];
 
           if (col < 0) break;
+          if (Math.abs(diff + 1) >= length) break;
 
           if (block.empty) {
                moves.push([row, col]);
@@ -242,6 +260,7 @@ function checkDiagonalMoves(GRID, selectedBlock, colorToCheckFor) {
           const block = GRID[row][col];
 
           if (col > GRID[0].length - 1) break;
+          if (Math.abs(diff + 1) >= length) break;
 
           if (block.empty) {
                moves.push([row, col]);
