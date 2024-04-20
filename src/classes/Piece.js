@@ -112,6 +112,33 @@ export class Knight extends Piece {
      constructor({ color, player }) {
           super({ color, player });
      }
+
+     findMoves(GRID, selectedBlock) {
+          const moves = [];
+          const row = selectedBlock.row;
+          const col = selectedBlock.col;
+
+          const checks = [
+               [-2, -1], // top right
+               [-2, 1], // top left
+               [-1, -2], // left top
+               [1, -2], // left bottom
+               [-1, 2], // right top
+               [1, 2], // right bottom
+               [2, 1], // bottom right
+               [2, -1] // bottom left
+          ];
+
+          for (const [checkRow, checkCol] of checks) {
+               const block = GRID?.[row + checkRow]?.[col + checkCol];
+
+               if (!block) continue;
+
+               if (block.empty || block.piece.color === this.opponentColor) moves.push([row + checkRow, col + checkCol]);
+          }
+
+          return moves;
+     }
 }
 
 function checkStraightMoves(GRID, selectedBlock, colorToCheckFor, length = Infinity) {
@@ -121,7 +148,6 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor, length = Infin
      // find moves upwards
      for (let row = selectedBlock.row - 1; row >= 0; row--) {
           const col = selectedBlock.col;
-
           const block = GRID[row][col];
 
           if (Math.abs(selectedBlock.row - row - 1) >= length) break;
@@ -156,7 +182,6 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor, length = Infin
      // find moves towards left
      for (let col = selectedBlock.col - 1; col >= 0; col--) {
           const row = selectedBlock.row;
-
           const block = GRID[row][col];
 
           if (Math.abs(selectedBlock.col - col - 1) >= length) break;
@@ -174,7 +199,6 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor, length = Infin
      // find moves towards right
      for (let col = selectedBlock.col + 1; col < GRID[selectedBlock.row].length; col++) {
           const row = selectedBlock.row;
-
           const block = GRID[row][col];
 
           if (Math.abs(selectedBlock.col - col + 1) >= length) break;
