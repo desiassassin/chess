@@ -1,23 +1,7 @@
 export class Piece {
      constructor({ color }) {
           this.color = color;
-     }
-
-     discardInvalidMoves(GRID, moves) {
-          const validMoves = [];
-
-          for (const move of moves) {
-               const row = move[0];
-               const col = move[1];
-               const colorToCheckFor = this.color === "white" ? "black" : "white";
-               const block = GRID[row][col];
-
-               if (block.empty || block.piece.color === colorToCheckFor) {
-                    validMoves.push(move);
-               }
-          }
-
-          return validMoves;
+          this.moved = false;
      }
 }
 
@@ -50,6 +34,38 @@ export class Rook extends Piece {
           // find moves downwards
           for (let row = selectedBlock.row + 1; row < GRID.length; row++) {
                const col = selectedBlock.col;
+
+               const block = GRID[row][col];
+
+               if (block.empty) {
+                    moves.push([row, col]);
+                    continue;
+               }
+               if (block.piece.color === colorToCheckFor) {
+                    moves.push([row, col]);
+               }
+               if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
+          }
+
+          // find moves towards left
+          for (let col = selectedBlock.col - 1; col >= 0; col--) {
+               const row = selectedBlock.row;
+
+               const block = GRID[row][col];
+
+               if (block.empty) {
+                    moves.push([row, col]);
+                    continue;
+               }
+               if (block.piece.color === colorToCheckFor) {
+                    moves.push([row, col]);
+               }
+               if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
+          }
+
+          // find moves towards right
+          for (let col = selectedBlock.col + 1; col < GRID[selectedBlock.row].length; col++) {
+               const row = selectedBlock.row;
 
                const block = GRID[row][col];
 

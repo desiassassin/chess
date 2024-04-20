@@ -48,22 +48,15 @@ const PIECE_POSITION = {
 };
 
 function App() {
-     const [GRID, setGRID] = useState(
-          new Array(ROWS).fill().map((_, row) => {
-               // create a row of blocks
-               return new Array(COLUMNS).fill().map((_, col) => {
-                    const piece = PIECE_POSITION[`${row}${col}`];
-                    const color = (row + col) % 2 ? "black" : "white";
-
-                    return new Block({ row, col, color, piece });
-               });
-          })
-     );
+     const [GRID, setGRID] = useState([]);
      const [selectedBlock, setSelectedBlock] = useState(null);
 
      function handlePieceSelect(event) {
           const [row, col] = event.currentTarget.id.split("-");
           const block = GRID[row][col];
+
+          // don't do anything if the block is empty
+          if (block.empty) return;
 
           // set this block as selected and store it as selected block
           block.select();
@@ -75,6 +68,24 @@ function App() {
           selectedBlock.unselect();
           setSelectedBlock(null);
      }
+
+     // create grid
+     useEffect(() => {
+          const grid = [];
+
+          for (let row = 0; row < ROWS; row++) {
+               grid.push([]);
+
+               for (let col = 0; col < COLUMNS; col++) {
+                    const piece = PIECE_POSITION[`${row}${col}`];
+                    const color = (row + col) % 2 ? "black" : "white";
+
+                    grid[row].push(new Block({ row, col, color, piece }));
+               }
+          }
+
+          setGRID(grid);
+     }, []);
 
      // run this everytime player selects a piece
      useEffect(() => {
@@ -128,7 +139,7 @@ function App() {
                                         const props = {
                                              fill: block.piece.color,
                                              stroke: "black",
-                                             strokeWidth: 10
+                                             strokeWidth: 5
                                         };
 
                                         if (block.piece instanceof Pawn) {
