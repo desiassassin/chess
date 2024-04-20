@@ -4,6 +4,7 @@ import { Block } from "./classes/Block";
 import { Piece, Pawn, Bishop, Rook, Knight, Queen, King } from "./classes/Piece";
 import { FaChessBishop, FaChessKing, FaChessKnight, FaChessPawn, FaChessQueen, FaChessRook } from "react-icons/fa";
 import { FcLikePlaceholder } from "react-icons/fc";
+import { combineClasses } from "./utils/utils";
 
 const ROWS = 8;
 const COLUMNS = 8;
@@ -47,7 +48,17 @@ const PIECE_POSITION = {
 };
 
 function App() {
-     const [GRID, setGRID] = useState([]);
+     const [GRID, setGRID] = useState(
+          new Array(ROWS).fill().map((_, row) => {
+               // create a row of blocks
+               return new Array(COLUMNS).fill().map((_, col) => {
+                    const piece = PIECE_POSITION[`${row}${col}`];
+                    const color = (row + col) % 2 ? "black" : "white";
+
+                    return new Block({ row, col, color, piece });
+               });
+          })
+     );
      const [selectedBlock, setSelectedBlock] = useState(null);
 
      function handlePieceSelect(event) {
@@ -62,46 +73,37 @@ function App() {
      function handlePieceDrop(event) {
           // set the already selected block as unselected
           selectedBlock.unselect();
-
           setSelectedBlock(null);
      }
 
-     // create grid
+     // run this everytime player selects a piece
      useEffect(() => {
-          const grid = [];
+          // clear possible paths when a block is unselected
+          if (!selectedBlock) {
+               setGRID((previousGrid) => {
+                    for (const row of previousGrid) {
+                         for (const block of row) {
+                              block.droppable = false;
+                         }
+                    }
 
-          for (let row = 0; row < ROWS; row++) {
-               grid.push([]);
-
-               for (let col = 0; col < COLUMNS; col++) {
-                    const piece = PIECE_POSITION[`${row}${col}`];
-                    const color = (row + col) % 2 ? "black" : "white";
-
-                    grid[row].push(new Block({ row, col, color, piece }));
-               }
+                    return [...previousGrid];
+               });
           }
 
-          setGRID(grid);
-     }, []);
-
-     // check for valid moves
-     useEffect(() => {
+          // show possible paths when a block is selected
           if (selectedBlock && !selectedBlock.empty) {
                const moves = selectedBlock.piece.findMoves(GRID, selectedBlock);
 
-               console.log(moves);
+               setGRID((previousGrid) => {
+                    for (const [row, col] of moves) {
+                         previousGrid[row][col].droppable = true;
+                    }
 
-               // setGRID((previousGrid) => {
-               //      for (const move of moves) {
-               //           const row = move[0] - 1;
-               //           const col = move[1] - 1;
-               //           previousGrid[row][col].droppable = true;
-               //      }
-
-               //      return [...previousGrid];
-               // });
+                    return [...previousGrid];
+               });
           }
-     }, [selectedBlock, GRID]);
+     }, [selectedBlock]);
 
      return (
           <>
@@ -111,7 +113,13 @@ function App() {
                               <div
                                    key={`${rowIndex}-${blockIndex}`}
                                    id={`${rowIndex}-${blockIndex}`}
-                                   className={`block ${block.color} ${block.selected ? "selected" : ""}`}
+                                   className={combineClasses(
+                                        "block",
+                                        block.color,
+                                        block.selected && "selected",
+                                        block.droppable && "droppable",
+                                        !block.empty && block.droppable && "kill"
+                                   )}
                                    onClick={selectedBlock ? handlePieceDrop : handlePieceSelect}
                               >
                                    {(function () {

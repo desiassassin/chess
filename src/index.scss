@@ -4,6 +4,7 @@ $white-square: #eeeed2;
 $black-square: #769656;
 $selected-square: #efd548;
 $kill-square: hsl(24, 77%, 58%);
+$drop-square: rgba(192, 192, 192, 0.5);
 $white-piece: #fff;
 $black-piece: #000;
 
@@ -44,6 +45,14 @@ body {
 
                     &.selected {
                          background-color: $selected-square !important;
+                    }
+                    &.droppable:not(.kill):after {
+                         background-color: $drop-square !important;
+                         content: "";
+                         position: absolute;
+                         height: calc($block-size / 3);
+                         border-radius: 50%;
+                         aspect-ratio: 1 / 1;
                     }
                     &.kill {
                          background-color: $kill-square !important;
