@@ -29,6 +29,10 @@ export class Queen extends Piece {
      constructor({ color, player }) {
           super({ color, player });
      }
+
+     findMoves(GRID, selectedBlock) {
+          return [...checkStraightMoves(GRID, selectedBlock, this.opponentColor), ...checkDiagonalMoves(GRID, selectedBlock, this.opponentColor)];
+     }
 }
 export class King extends Piece {
      constructor({ color, player }) {
