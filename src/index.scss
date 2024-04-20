@@ -35,17 +35,19 @@ body {
                     font-size: $piece-size;
                     display: grid;
                     place-items: center;
-                    cursor: grab;
-
-                    &:active {
-                         cursor: grabbing;
-                    }
 
                     &.white {
                          background-color: $white-square !important;
                     }
                     &.black {
                          background-color: $black-square !important;
+                    }
+                    &.piece {
+                         cursor: grab;
+
+                         &:active {
+                              cursor: grabbing;
+                         }
                     }
 
                     &.selected {

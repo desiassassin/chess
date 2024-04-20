@@ -147,7 +147,8 @@ function App() {
                                         block.color,
                                         block.selected && "selected",
                                         block.droppable && "droppable",
-                                        !block.empty && block.droppable && "kill"
+                                        !block.empty && block.droppable && "kill",
+                                        !block.empty && "piece"
                                    )}
                                    onClick={selectedBlock ? handlePieceDrop : handlePieceSelect}
                               >

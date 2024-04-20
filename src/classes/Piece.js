@@ -62,23 +62,24 @@ export class Pawn extends Piece {
                     const col = selectedBlock.col;
                     const block = GRID[row][col];
                     const leftDiagonalBlock = GRID[row][col - 1];
-                    const righttDiagonalBlock = GRID[row][col + 1];
+                    const rightDiagonalBlock = GRID[row][col + 1];
 
                     if (block.empty) {
                          moves.push([row, col]);
-                         continue;
                     }
 
-                    // check for left side diagonally
-                    if (leftDiagonalBlock && leftDiagonalBlock.piece.color === this.opponentColor) {
-                         moves.push([leftDiagonalBlock.row, leftDiagonalBlock.col]);
-                    }
-                    // check for right side diagonally
-                    if (righttDiagonalBlock && righttDiagonalBlock.piece.color === this.opponentColor) {
-                         moves.push([righttDiagonalBlock.row, righttDiagonalBlock.col]);
+                    if (Math.abs(selectedBlock.row - row) === 1) {
+                         // check for left side diagonally
+                         if (leftDiagonalBlock && !leftDiagonalBlock.empty && leftDiagonalBlock.piece?.color === this.opponentColor) {
+                              moves.push([leftDiagonalBlock.row, leftDiagonalBlock.col]);
+                         }
+                         // check for right side diagonally
+                         if (rightDiagonalBlock && !rightDiagonalBlock.empty && rightDiagonalBlock.piece?.color === this.opponentColor) {
+                              moves.push([rightDiagonalBlock.row, rightDiagonalBlock.col]);
+                         }
                     }
 
-                    if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
+                    if (!block.empty || block.piece?.color === selectedBlock.piece.color) break;
                }
           } else if (this.player === 2) {
                // check for moves in downwards direction
@@ -86,22 +87,23 @@ export class Pawn extends Piece {
                     const col = selectedBlock.col;
                     const block = GRID[row][col];
                     const leftDiagonalBlock = GRID[row][col - 1];
-                    const righttDiagonalBlock = GRID[row][col + 1];
+                    const rightDiagonalBlock = GRID[row][col + 1];
 
                     if (block.empty) {
                          moves.push([row, col]);
-                         continue;
                     }
 
-                    // check for left side diagonally
-                    if (leftDiagonalBlock && leftDiagonalBlock.piece.color === this.opponentColor) {
-                         moves.push([leftDiagonalBlock.row, leftDiagonalBlock.col]);
+                    if (Math.abs(selectedBlock.row - row) === 1) {
+                         // check for left side diagonally
+                         if (leftDiagonalBlock && !leftDiagonalBlock.empty && leftDiagonalBlock.piece?.color === this.opponentColor) {
+                              moves.push([leftDiagonalBlock.row, leftDiagonalBlock.col]);
+                         }
+                         // check for right side diagonally
+                         if (rightDiagonalBlock && !rightDiagonalBlock.empty && rightDiagonalBlock.piece?.color === this.opponentColor) {
+                              moves.push([rightDiagonalBlock.row, rightDiagonalBlock.col]);
+                         }
                     }
-                    // check for right side diagonally
-                    if (righttDiagonalBlock && righttDiagonalBlock.piece.color === this.opponentColor) {
-                         moves.push([righttDiagonalBlock.row, righttDiagonalBlock.col]);
-                    }
-                    if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
+                    if (!block.empty || block.piece?.color === selectedBlock.piece.color) break;
                }
           }
 
