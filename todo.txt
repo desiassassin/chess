@@ -1,0 +1,2 @@
+- convert pawn to some other piece when it reaches the top/bottom end of the board
+- check for check on king

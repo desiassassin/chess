@@ -44,7 +44,7 @@ const PIECE_POSITION = {
      74: new King({ color: "white", player: 1 }),
      75: new Bishop({ color: "white", player: 1 }),
      76: new Knight({ color: "white", player: 1 }),
-     47: new Rook({ color: "white", player: 1 })
+     77: new Rook({ color: "white", player: 1 })
 };
 
 function App() {

@@ -3,6 +3,7 @@ export class Piece {
           this.color = color;
           this.moved = false;
           this.player = player;
+          this.opponentColor = this.color === "white" ? "black" : "white";
      }
 }
 
@@ -12,13 +13,16 @@ export class Rook extends Piece {
      }
 
      findMoves(GRID, selectedBlock) {
-          const colorToCheckFor = this.color === "white" ? "black" : "white";
-          return checkStraightMoves(GRID, selectedBlock, colorToCheckFor);
+          return checkStraightMoves(GRID, selectedBlock, this.opponentColor);
      }
 }
 export class Bishop extends Piece {
      constructor({ color, player }) {
           super({ color, player });
+     }
+
+     findMoves(GRID, selectedBlock) {
+          return checkDiagonalMoves(GRID, selectedBlock, this.opponentColor);
      }
 }
 export class Queen extends Piece {
@@ -37,7 +41,6 @@ export class Pawn extends Piece {
      }
 
      findMoves(GRID, selectedBlock) {
-          const colorToCheckFor = this.color === "white" ? "black" : "white";
           const offset = this.moved ? 0 : 1;
 
           const moves = [];
@@ -56,11 +59,11 @@ export class Pawn extends Piece {
                     }
 
                     // check for left side diagonally
-                    if (leftDiagonalBlock && leftDiagonalBlock.piece.color === colorToCheckFor) {
+                    if (leftDiagonalBlock && leftDiagonalBlock.piece.color === this.opponentColor) {
                          moves.push([leftDiagonalBlock.row, leftDiagonalBlock.col]);
                     }
                     // check for right side diagonally
-                    if (righttDiagonalBlock && righttDiagonalBlock.piece.color === colorToCheckFor) {
+                    if (righttDiagonalBlock && righttDiagonalBlock.piece.color === this.opponentColor) {
                          moves.push([righttDiagonalBlock.row, righttDiagonalBlock.col]);
                     }
 
@@ -80,11 +83,11 @@ export class Pawn extends Piece {
                     }
 
                     // check for left side diagonally
-                    if (leftDiagonalBlock && leftDiagonalBlock.piece.color === colorToCheckFor) {
+                    if (leftDiagonalBlock && leftDiagonalBlock.piece.color === this.opponentColor) {
                          moves.push([leftDiagonalBlock.row, leftDiagonalBlock.col]);
                     }
                     // check for right side diagonally
-                    if (righttDiagonalBlock && righttDiagonalBlock.piece.color === colorToCheckFor) {
+                    if (righttDiagonalBlock && righttDiagonalBlock.piece.color === this.opponentColor) {
                          moves.push([righttDiagonalBlock.row, righttDiagonalBlock.col]);
                     }
                     if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
@@ -156,6 +159,85 @@ function checkStraightMoves(GRID, selectedBlock, colorToCheckFor) {
           const row = selectedBlock.row;
 
           const block = GRID[row][col];
+
+          if (block.empty) {
+               moves.push([row, col]);
+               continue;
+          }
+          if (block.piece.color === colorToCheckFor) {
+               moves.push([row, col]);
+          }
+          if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
+     }
+
+     return moves;
+}
+
+function checkDiagonalMoves(GRID, selectedBlock, colorToCheckFor) {
+     // find vertical moves
+     const moves = [];
+
+     // find moves upwards diagonally left
+     for (let row = selectedBlock.row - 1; row >= 0; row--) {
+          const diff = selectedBlock.row - row;
+          const col = selectedBlock.col - diff;
+          const block = GRID[row][col];
+
+          if (col < 0) break;
+
+          if (block.empty) {
+               moves.push([row, col]);
+               continue;
+          }
+          if (block.piece.color === colorToCheckFor) {
+               moves.push([row, col]);
+          }
+          if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
+     }
+
+     // find moves upwards diagonally right
+     for (let row = selectedBlock.row - 1; row >= 0; row--) {
+          const diff = selectedBlock.row - row;
+          const col = selectedBlock.col + diff;
+          const block = GRID[row][col];
+
+          if (col > GRID[0].length - 1) break;
+
+          if (block.empty) {
+               moves.push([row, col]);
+               continue;
+          }
+          if (block.piece.color === colorToCheckFor) {
+               moves.push([row, col]);
+          }
+          if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
+     }
+
+     // find moves downwards diagonally left
+     for (let row = selectedBlock.row + 1; row < GRID.length; row++) {
+          const diff = selectedBlock.row - row;
+          const col = selectedBlock.col + diff;
+          const block = GRID[row][col];
+
+          if (col < 0) break;
+
+          if (block.empty) {
+               moves.push([row, col]);
+               continue;
+          }
+          if (block.piece.color === colorToCheckFor) {
+               moves.push([row, col]);
+          }
+          if (!block.empty || block.piece.color === selectedBlock.piece.color) break;
+     }
+
+     // find moves downwards diagonally right
+     for (let row = selectedBlock.row + 1; row < GRID.length; row++) {
+          const diff = selectedBlock.row - row;
+          const col = selectedBlock.col - diff;
+          const block = GRID[row][col];
+
+          if (col > GRID[0].length - 1) break;
 
           if (block.empty) {
                moves.push([row, col]);
