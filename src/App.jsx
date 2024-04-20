@@ -50,6 +50,7 @@ const PIECE_POSITION = {
 function App() {
      const [GRID, setGRID] = useState([]);
      const [selectedBlock, setSelectedBlock] = useState(null);
+     const [playerTurn, setPlayerTurn] = useState(1);
 
      function handlePieceSelect(event) {
           const [row, col] = event.currentTarget.id.split("-");
@@ -57,6 +58,9 @@ function App() {
 
           // don't do anything if the block is empty
           if (block.empty) return;
+
+          // check if the block selected is of current player according to player's turn
+          if (block.piece.player !== playerTurn) return;
 
           // set this block as selected and store it as selected block
           block.select();
@@ -75,6 +79,7 @@ function App() {
           if (nextBlock.droppable) {
                nextBlock.assignPiece(selectedBlock.piece);
                selectedBlock.removePiece();
+               setPlayerTurn((previousPlayer) => (previousPlayer === 1 ? 2 : 1));
           }
 
           // set the already selected block as unselected

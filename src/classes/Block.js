@@ -2,7 +2,7 @@ export class Block {
      constructor({ row, col, color, piece }) {
           this.row = row;
           this.col = col;
-          this.color = color;
+          this.color = color; // block color
           this.piece = piece;
           this.empty = !!!piece;
           this.selected = false;
